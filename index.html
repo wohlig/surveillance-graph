@@ -1,0 +1,104 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <script src="https://code.highcharts.com/stock/highstock.js"></script>
+        <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+        <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+        <div id="container" style="height: 400px; min-width: 310px"></div>
+        <script>
+            var seriesOptions = [[],[]],
+  seriesCounter = 0,
+  names = ['rates', 'bets'];
+
+/**
+ * Create the chart when all data is loaded
+ * @returns {undefined}
+ */
+function createChart() {
+
+  Highcharts.stockChart('container', {
+
+    rangeSelector: {
+      selected: 4
+    },
+
+    yAxis: {
+      labels: {
+        formatter: function () {
+          return (this.value > 0 ? ' + ' : '') + this.value + '%';
+        }
+      },
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: 'silver'
+      }]
+    },
+
+    tooltip: {
+      pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+      valueDecimals: 2,
+      split: true
+    },
+
+    series: seriesOptions
+  });
+}
+
+function betsSuccess(data) {
+    console.log(data[0]);
+  var newData = data.map(function(m) {
+      var date = moment(m.createdAt.$date).unix()
+    return [date,m.rates]
+  })
+  seriesOptions[1] = {
+    name: "Bet",
+    data: newData,
+    lineWidth: 0,
+            marker: {
+                enabled: true,
+                radius: 4
+            },
+            tooltip: {
+                valueDecimals: 2
+            },
+            states: {
+                hover: {
+                    lineWidthPlus: 0
+                }
+            }
+  };
+
+    createChart();
+}
+
+function ratesSuccess(data) {
+    console.log(data[0]);
+  var newData = data.map(function(m) {
+      var date = moment(m.createdAt.$date).unix()
+    return [date,m.rates]
+  })
+  seriesOptions[0] = {
+    name: "Rate",
+    data: newData
+  };
+
+    createChart();
+}
+
+Highcharts.getJSON(
+  './data/bets.json',
+  betsSuccess
+);
+Highcharts.getJSON(
+  './data/rates.json',
+  ratesSuccess
+);
+        </script>
+    </body>
+</html>
+
