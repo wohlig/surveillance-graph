@@ -7,10 +7,11 @@
         <script src="https://code.highcharts.com/stock/modules/data.js"></script>
         <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
         <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js" integrity="sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
         <div id="container" style="height: 400px; min-width: 310px"></div>
         <script>
-            var seriesOptions = [[],[]],
+            var seriesOptions = [],
   seriesCounter = 0,
   names = ['rates', 'bets'];
 
@@ -50,41 +51,80 @@ function createChart() {
 }
 
 function betsSuccess(data) {
-    console.log(data[0]);
-  var newData = data.map(function(m) {
+  var layData = _.filter(data,function(n) {
+    return n.type == "LAY"
+  })
+  var backData = _.filter(data,function(n) {
+    return n.type == "BACK"
+  })
+  layData = layData.map(function(m) {
       var date = moment(m.createdAt.$date).unix()
     return [date,m.rates]
   })
-  seriesOptions[1] = {
-    name: "Bet",
-    data: newData,
+  backData = backData.map(function(m) {
+      var date = moment(m.createdAt.$date).unix()
+    return [date,m.rates]
+  })
+  seriesOptions[2] = {
+    name: "Lay Bet",
+    data: layData,
     lineWidth: 0,
-            marker: {
-                enabled: true,
-                radius: 4
-            },
-            tooltip: {
-                valueDecimals: 2
-            },
-            states: {
-                hover: {
-                    lineWidthPlus: 0
-                }
-            }
+    marker: {
+        enabled: true,
+        radius: 4,
+        fillColor:"#FF5733",
+        symbol: "circle"
+    },
+    tooltip: {
+        valueDecimals: 2
+    },
+    states: {
+        hover: {
+            lineWidthPlus: 0
+        }
+    }
+  };
+  seriesOptions[3] = {
+    name: "Back Bet",
+    data: backData,
+    lineWidth: 0,
+    marker: {
+        enabled: true,
+        radius: 4,
+        fillColor:"#1756F3",
+        symbol: "circle"
+    },
+    tooltip: {
+        valueDecimals: 2
+    },
+    states: {
+        hover: {
+            lineWidthPlus: 0
+        }
+    }
   };
 
     createChart();
 }
 
 function ratesSuccess(data) {
-    console.log(data[0]);
-  var newData = data.map(function(m) {
+  var rateBack = data.map(function(m) {
       var date = moment(m.createdAt.$date).unix()
-    return [date,m.rates]
+    return [date,m.rateBack]
+  })
+  var rateLay = data.map(function(m) {
+      var date = moment(m.createdAt.$date).unix()
+    return [date,m.rateLay]
   })
   seriesOptions[0] = {
-    name: "Rate",
-    data: newData
+    name: "Rate Back",
+    data: rateBack,
+    color:"#87A6F3"
+  };
+  seriesOptions[1] = {
+    name: "Rate Lay",
+    data: rateLay,
+    color:"#FDB2A2"
   };
 
     createChart();
