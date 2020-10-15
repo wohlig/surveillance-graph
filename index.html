@@ -23,6 +23,10 @@ function createChart() {
 
   Highcharts.stockChart('container', {
 
+
+    title: {
+            text: "Delhi Capitals v Rajasthan Royals - Match Odds"
+        },
     rangeSelector: {
       selected: 4
     },
@@ -69,6 +73,7 @@ function betsSuccess(data) {
     name: "Lay Bet",
     data: layData,
     lineWidth: 0,
+    color:"#FF5733",
     marker: {
         enabled: true,
         radius: 4,
@@ -88,6 +93,7 @@ function betsSuccess(data) {
     name: "Back Bet",
     data: backData,
     lineWidth: 0,
+    color:"#1756F3",
     marker: {
         enabled: true,
         radius: 4,
@@ -119,11 +125,13 @@ function ratesSuccess(data) {
   seriesOptions[0] = {
     name: "Rate Back",
     data: rateBack,
+    type: 'spline',
     color:"#87A6F3"
   };
   seriesOptions[1] = {
     name: "Rate Lay",
     data: rateLay,
+    type: 'spline',
     color:"#FDB2A2"
   };
 
