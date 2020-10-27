@@ -6,6 +6,7 @@
   "author": "Chintan Shah <chintan@wohlig.com>",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1"
   }
 }
