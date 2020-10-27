@@ -1,11 +1,11 @@
-const { isObject } = require("lodash");
+var moment = require("moment");
 var _ = require("lodash");
 var fs = require("fs");
 var oldFile = require("./data/2954260.json");
 
 var newFile = _.map(oldFile, function (obj) {
   var retObj = {
-    d: obj.createdAt,
+    d: moment(obj.createdAt).unix(),
   };
   if (obj.rateBack) {
     retObj.b = { p: obj.rateBack.price, s: obj.rateBack.size };
