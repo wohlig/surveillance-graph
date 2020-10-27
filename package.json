@@ -1,0 +1,11 @@
+{
+  "name": "surveillance-graph",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/wohlig/surveillance-graph.git",
+  "author": "Chintan Shah <chintan@wohlig.com>",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.20"
+  }
+}
