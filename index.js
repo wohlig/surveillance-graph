@@ -23,5 +23,17 @@ var newFile = _.map(oldFile, function (obj) {
   return retObj;
 });
 
-let data = JSON.stringify(newFile);
+oldBack = 0;
+oldLay = 0;
+var removeRedundant = _.filter(newFile, function (obj) {
+  if (oldBack == obj.b && oldLay == obj.l) {
+    return false;
+  } else {
+    oldBack = obj.b;
+    oldLay = obj.l;
+    return true;
+  }
+});
+
+let data = JSON.stringify(removeRedundant);
 fs.writeFileSync("compressed/2954260.json", data);
