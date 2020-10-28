@@ -2,6 +2,7 @@ var moment = require("moment");
 var _ = require("lodash");
 var fs = require("fs");
 var oldFile = require("./data/2954260.json");
+
 var oldBack = 0;
 var oldLay = 0;
 var newFile = _.map(oldFile, function (obj) {
